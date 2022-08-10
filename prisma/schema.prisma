@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id             Int              @id @default(autoincrement())
+  name           String
+  email          String           @unique
+  password       String
+  sessions       sessions[]
+  specialClasses specialClasses[]
+  students       students[]
+  weeklyClasses  weeklyClasses[]
+}
+
+model sessions {
+  id     Int    @id @default(autoincrement())
+  userId Int
+  token  String @unique
+  users  users  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model specialClasses {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  studentId Int
+  date      String
+  hour      String
+  students  students @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users     users    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model students {
+  id             Int              @id @default(autoincrement())
+  userId         Int
+  name           String           @unique
+  weight         Decimal          @db.Decimal
+  height         Decimal          @db.Decimal
+  objective      String
+  comments       String?
+  users          users            @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  specialClasses specialClasses[]
+  weeklyClasses  weeklyClasses[]
+}
+
+model weeklyClasses {
+  id              Int               @id @default(autoincrement())
+  userId          Int
+  studentId       Int
+  name            String
+  students        students          @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users           users             @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  weeklySchedules weeklySchedules[]
+}
+
+model weeklySchedules {
+  id            Int           @id @default(autoincrement())
+  weeklyClassId Int
+  weekday       String
+  hour          String
+  weeklyClasses weeklyClasses @relation(fields: [weeklyClassId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
