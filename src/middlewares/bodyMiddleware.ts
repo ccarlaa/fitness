@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { wrongSchemaError } from "../utils/errorUtils.js";
 
-export function authMiddleware(schema : any) {
+export function bodyMiddleware(schema : any) {
     return (req : Request, res : Response, next : NextFunction) => {
         const validation = schema.validate(req.body);
 

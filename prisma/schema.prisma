@@ -7,17 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id             Int              @id @default(autoincrement())
-  name           String
-  email          String           @unique
-  password       String
-  sessions       sessions[]
-  specialClasses specialClasses[]
-  students       students[]
-  weeklyClasses  weeklyClasses[]
-}
-
 model sessions {
   id     Int    @id @default(autoincrement())
   userId Int
@@ -43,8 +32,20 @@ model students {
   height         Decimal          @db.Decimal
   objective      String
   comments       String?
+  age            Int?
   users          users            @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   specialClasses specialClasses[]
+  weeklyClasses  weeklyClasses[]
+}
+
+model users {
+  id             Int              @id @default(autoincrement())
+  name           String
+  email          String           @unique
+  password       String
+  sessions       sessions[]
+  specialClasses specialClasses[]
+  students       students[]
   weeklyClasses  weeklyClasses[]
 }
 
