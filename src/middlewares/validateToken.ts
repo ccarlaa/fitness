@@ -14,7 +14,7 @@ export async function validateToken(req: Request, res: Response, next: NextFunct
         return res.status(401).send("Token não enviado");
     }
 
-    jwt.verify(token, secretKey,function(err) {
+    jwt.verify(token, secretKey, function(err) {
         if(err) {
             error = err;
         }
