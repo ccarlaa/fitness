@@ -81,3 +81,20 @@ export async function updateStudentService(
 
     await updateStudent(studentInfosUpdate, studentId)
 }
+
+export async function findUniqueStudent(studentId: number, userId: number) {
+    const studentInfos = await getStudentById(studentId);
+    
+    if(studentInfos == undefined) {
+        throw notFoundError("Estudante não encontrado");
+    }
+
+    if(studentInfos.userId != userId) {
+        throw unauthorizedError("Você não tem acesso as informações desse aluno");
+    }
+
+    delete studentInfos.id;
+    delete studentInfos.userId;
+
+    return studentInfos;
+}

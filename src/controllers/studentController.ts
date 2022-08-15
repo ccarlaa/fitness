@@ -1,6 +1,6 @@
 import { Decimal } from '@prisma/client/runtime/index.js';
 import { Request, Response } from 'express';
-import { deleteStudentService, getStudentsService, newStudentService, updateStudentService } from '../services/studentService.js';
+import { deleteStudentService, findUniqueStudent, getStudentsService, newStudentService, updateStudentService } from '../services/studentService.js';
 
 export async function newStudentController(req: Request, res: Response) {
     const {
@@ -39,7 +39,7 @@ export async function getStudentsController(req: Request, res: Response) {
 
     const studentsList = await getStudentsService(userId);
 
-    return res.status(200).send(studentsList);
+    return res.status(200).send(studentsList.reverse());
 }
 
 export async function deleteStudentController(req: Request, res: Response) {
@@ -87,4 +87,15 @@ export async function updateStudentController(req: Request, res: Response) {
     )
 
     return res.status(201).send("Informações atualizadas com sucesso");
+}
+
+export async function findUniqueStudentController(req: Request, res: Response) {
+    const { userId } = res.locals.userId;
+    const { id } = req.params;
+
+    const studentId = parseInt(id);
+
+    const student = await findUniqueStudent(studentId, userId);
+
+    return res.status(200).send(student);
 }
