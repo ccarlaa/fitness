@@ -11,16 +11,16 @@ export async function validateToken(req: Request, res: Response, next: NextFunct
     let error: Error;
     const secretKey = process.env.SECRET_KEY;
     if(!token) {
-        return res.status(401).send("Token not send");
+        return res.status(401).send("Token não enviado");
     }
 
-    jwt.verify(token, secretKey,function(err) {
+    jwt.verify(token, secretKey, function(err) {
         if(err) {
             error = err;
         }
     })
     if(error) {
-        return res.status(401).send("Invalid token"); 
+        return res.status(401).send("Token invalido"); 
     }
 
     const sessionValidate = await verifySession(token);

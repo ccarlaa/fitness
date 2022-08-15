@@ -8,7 +8,7 @@ export async function signUpService(name: string, email: string, password: strin
     const validateEmail = await verifyEmail(email);
 
     if(validateEmail != undefined) {
-        throw conflictError("Email already in use");
+        throw conflictError("Esse email já foi cadastrado");
     }
 
     const passwordEncrypted = encrypt(password);
@@ -24,7 +24,7 @@ export async function signUpService(name: string, email: string, password: strin
 export async function signInService(email: string, password: string) {
     const validateEmail = await verifyEmail(email);
     if(validateEmail == undefined) {
-        throw notFoundError("User not found");
+        throw notFoundError("Usuário não encontrado");
     }
     
     const passwordEncrypted = validateEmail.password;
